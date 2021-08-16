@@ -1,12 +1,8 @@
-const express = require('express')
 const data = require("./data");
 const _ = require('lodash');
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
-
-const app = express();
-app.use(express.json());
 
 const typeMaps = {
     LAA: 'loans',
@@ -116,7 +112,8 @@ function formatAccount(acc, account) {
     return acc;
 }
 
-async function run(username, password) {
+async function run(username) {
+    const password = 'ZCNkZW1v';
     try {
         const [userDetails, accounts] = await Promise.all([loginUsers(username, password), getAccounts(username)])
         const payload = generatePayload(userDetails, accounts);
@@ -126,29 +123,14 @@ async function run(username, password) {
         );
         return null;
     } catch (e) {
+        console.log(`=============================${username}\n\n\n\n`, e, `\n\n\n\n${username}============================`)
         return username;
     }
     console.log(username, "done");
 }
 
 const users = [
-    'GPLANGE', 'CAROLINE1612', 'AMIYO', 'NKA'
+    'DOMCY2000', 'KWEKU13', 'ABZ', 'CHEM2015', 'CYNDY77', 'ODETTEB', 'PQUANTSON10', 'GPLANGE', 'CAROLINE1612', 'AMIYO', 'NKA'
 ]
 
-// const users = [
-//   'DOMCY2000', 'KWEKU13', 'ABZ', 'CHEM2015', 'CYNDY77', 'ODETTEB', 'PQUANTSON10'
-// ]
-
-app.post('/', async (req, res) => {
-    const users = await Promise.all(req.body.users.map(u => run(u, 'ZCNkZW1v')));
-    res.json({status: 'success', failed: users.filter(u => !!u)})
-})
-
-app.get('/', (req, res) => {
-    res.json(
-        fs.readdirSync('./data').filter(d => d.endsWith(".json"))
-            .map(d => path.basename(d, '.json'))
-    );
-})
-
-app.listen(4000, () => console.log('listening'))
+Promise.all(users.map(run));
