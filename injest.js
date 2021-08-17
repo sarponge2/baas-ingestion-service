@@ -2,13 +2,13 @@
 const {run} = require("./lib");
 
 const users = [
-    'DOMCY2000', 'KWEKU13', 'ABZ', 'CHEM2015', 'CYNDY77', 'ODETTEB', 'PQUANTSON10', 'GPLANGE',
+    'DOMCY2000', 'KWEKU13', 'ABZ', 'CHEM2015', 'CYNDY77', 'PQUANTSON10',
 ]
 
-// 'CAROLINE1612', 'AMIYO', 'NKA'
+// 'CAROLINE1612', 'AMIYO', 'NKA', 'ODETTEB', 'GPLANGE',
 
 // const users = [
-//     'FRANNY'
+//     'ABZ'
 // ]
 
 Promise.all(users.map(run));

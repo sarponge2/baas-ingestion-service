@@ -3,6 +3,7 @@ const _ = require('lodash');
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
+const {use} = require("express/lib/router");
 
 const typeMaps = {
     LAA: 'loans',
@@ -95,20 +96,20 @@ function getRandomArbitrary() {
     return Math.round(Math.random() * (max - min) + min);
 }
 
-function generatePayload(loginResp, accounts) {
-    const json = data();
+function generatePayload(username, loginResp, accounts) {
+    const json = data(), email = `${username.toLowerCase()}@stanbic.com.gh`, phone = `233${getRandomArbitrary()}`
     _.set(json, 'name', `${loginResp.firstName} ${loginResp.lastName}`);
     _.set(json, 'externalId', loginResp.customerId);
-    _.set(json, 'users[0].user.externalId', loginResp.username);
+    _.set(json, 'users[0].user.externalId', username);
     _.set(json, 'users[0].user.fullName', `${loginResp.firstName} ${loginResp.lastName}`);
-    _.set(json, 'users[0].user.emailAddress.address', `${loginResp.username.toLowerCase()}@stanbic.com.gh`);
-    _.set(json, 'users[0].user.mobileNumber.number', `233${getRandomArbitrary()}`);
+    _.set(json, 'users[0].user.emailAddress.address', email);
+    _.set(json, 'users[0].user.mobileNumber.number', phone);
 
-    _.set(json, 'productGroups[0].name', `${loginResp.username} datagroup`.toLowerCase());
-    _.set(json, 'productGroups[0].users[0].user.externalId', loginResp.username);
+    _.set(json, 'productGroups[0].name', `${username} datagroup`.toLowerCase());
+    _.set(json, 'productGroups[0].users[0].user.externalId', username);
     _.set(json, 'productGroups[0].users[0].user.fullName', `${loginResp.firstName} ${loginResp.lastName}`);
-    _.set(json, 'productGroups[0].users[0].user.emailAddress.address', loginResp.emailId);
-    _.set(json, 'productGroups[0].users[0].user.mobileNumber.number', loginResp.mobileNo);
+    _.set(json, 'productGroups[0].users[0].user.emailAddress.address', email);
+    _.set(json, 'productGroups[0].users[0].user.mobileNumber.number', phone);
 
     accounts.reduce(formatAccount, _.get(json, 'productGroups[0]'));
 
@@ -146,17 +147,17 @@ async function run(username) {
             getAccounts(username),
             deleteUser(username)
         ])
-        const payload = generatePayload(userDetails, accounts);
-        // await ingestUser(payload);
+        const payload = generatePayload(username, userDetails, accounts);
+        await ingestUser(payload);
         fs.writeFileSync(
             path.resolve('data', `${username}.json`), JSON.stringify(payload, null, 2)
         );
+        console.log(username, "done");
         return null;
     } catch (e) {
         console.log(`=============================${username}\n\n\n\n`, e, `\n\n\n\n${username}============================`)
         return username;
     }
-    console.log(username, "done");
 }
 
 function listing() {
