@@ -191,12 +191,7 @@ module.exports = () => ({
                         "Retail User Job"
                     ]
                 }
-            ],
-            "currentAccounts": [],
-            "savingAccounts": [],
-            "investmentAccounts": [],
-            "loans": [],
-            "creditCards": []
+            ]
         }
     ]
 })
