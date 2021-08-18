@@ -11,4 +11,8 @@ const users = [
 //     'ABZ'
 // ]
 
-Promise.all(users.map(run));
+// console.log(process.argv)
+
+run(process.argv[2])
+
+// Promise.all(users.map(run));
