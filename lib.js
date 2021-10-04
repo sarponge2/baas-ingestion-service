@@ -3,7 +3,6 @@ const _ = require('lodash');
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
-const {use} = require("express/lib/router");
 
 const typeMaps = {
     LAA: 'loans',
@@ -97,7 +96,7 @@ function getRandomArbitrary() {
 }
 
 function generatePayload(username, loginResp, accounts) {
-    const json = data(), email = `${username.toLowerCase()}@stanbic.com.gh`, phone = `233${getRandomArbitrary()}`
+    const json = data.payload(), email = `${username.toLowerCase()}@stanbic.com.gh`, phone = `233${getRandomArbitrary()}`
     _.set(json, 'name', `${loginResp.firstName} ${loginResp.lastName}`);
     _.set(json, 'externalId', loginResp.customerId);
     _.set(json, 'users[0].user.externalId', username);
@@ -110,6 +109,8 @@ function generatePayload(username, loginResp, accounts) {
     _.set(json, 'productGroups[0].users[0].user.fullName', `${loginResp.firstName} ${loginResp.lastName}`);
     _.set(json, 'productGroups[0].users[0].user.emailAddress.address', email);
     _.set(json, 'productGroups[0].users[0].user.mobileNumber.number', phone);
+
+    _.set(json, 'referenceJobRoles', data.userJobRoles())
 
     accounts.reduce(formatAccount, _.get(json, 'productGroups[0]'));
 
@@ -139,6 +140,21 @@ function formatAccount(acc, account) {
     return acc;
 }
 
+async function admin(username) {
+    const password = 'ZCNkZW1v';
+    try {
+        const payload = require(`./data/${username}.json`)
+        _.set(payload, 'referenceJobRoles', data.adminJobRoles())
+
+        await ingestUser(payload);
+        console.log(username, "done");
+        return null;
+    } catch (e) {
+        console.log(`=============================${username}\n\n\n\n`, e, `\n\n\n\n${username}============================`)
+        return username;
+    }
+}
+
 async function run(username) {
     const password = 'ZCNkZW1v';
     try {
@@ -166,5 +182,5 @@ function listing() {
 }
 
 module.exports = {
-    run, listing
+    run, listing, admin
 }
