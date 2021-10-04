@@ -29,7 +29,8 @@ const options = commandLineUsage([
 
 args = commandLineArgs(optionList)
 
-if (!Object.keys(args).length || args.help || !args.user) console.log(options)
+if (!Object.keys(args).length || args.help || !args.user)
+    return console.log(options)
 
 args.env = args.env || 'dev'
 
