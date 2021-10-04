@@ -3,6 +3,7 @@ const _ = require('lodash');
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
+const {env} = require("fetch/.eslintrc");
 
 const typeMaps = {
     LAA: 'loans',
@@ -82,9 +83,9 @@ async function deleteUser(username) {
     }
 }
 
-async function ingestUser(payload) {
+async function ingestUser(payload, env = "dev") {
     return await makeAPostCall(
-        'https://sbg-legal-entity-http.stg.sbg.live.backbaseservices.com/legal-entity',
+        `https://sbg-legal-entity-http.${env}.sbg.live.backbaseservices.com/legal-entity`,
         payload,
         {'X-PRDL-BAAS': 'sbg-stg-b5d46a71-e33f-420c-8e10-e644ff61c0967'}
     )
@@ -140,8 +141,7 @@ function formatAccount(acc, account) {
     return acc;
 }
 
-async function admin(username) {
-    const password = 'ZCNkZW1v';
+async function admin(username, env) {
     try {
         const payload = require(`./data/${username}.json`)
         _.set(payload, 'realmName', 'employee')
@@ -152,7 +152,7 @@ async function admin(username) {
 
         console.log(JSON.stringify(payload))
 
-        await ingestUser(payload);
+        await ingestUser(payload, env);
         console.log(username, "done");
         return null;
     } catch (e) {
@@ -161,7 +161,7 @@ async function admin(username) {
     }
 }
 
-async function run(username) {
+async function run(username, env) {
     const password = 'ZCNkZW1v';
     try {
         const [userDetails, accounts] = await Promise.all([
@@ -170,7 +170,7 @@ async function run(username) {
             deleteUser(username)
         ])
         const payload = generatePayload(username, userDetails, accounts);
-        await ingestUser(payload);
+        await ingestUser(payload, env);
         fs.writeFileSync(
             path.resolve('data', `${username}.json`), JSON.stringify(payload, null, 2)
         );

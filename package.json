@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "command-line-args": "^5.2.0",
+    "command-line-usage": "^6.1.1",
     "express": "^4.17.1",
     "fetch": "^1.1.0",
     "lodash": "^4.17.21",
