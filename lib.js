@@ -3,7 +3,6 @@ const _ = require('lodash');
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
-const {env} = require("fetch/.eslintrc");
 
 const typeMaps = {
     LAA: 'loans',
@@ -22,6 +21,8 @@ function makeAPostCall(url, data, headers) {
         body: JSON.stringify(data)
     }).then(function (response) {
         return response.json();
+    }).catch(e => {
+        console.log(e)
     });
 }
 
