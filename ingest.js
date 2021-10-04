@@ -29,9 +29,9 @@ const options = commandLineUsage([
 
 args = commandLineArgs(optionList)
 
-args.env = args.env || 'dev'
-
 if (!Object.keys(args).length || args.help || !args.user) console.log(options)
+
+args.env = args.env || 'dev'
 
 if (args.employee) admin(args.user, args.env)
 else run(args.user, args.env)
