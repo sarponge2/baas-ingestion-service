@@ -147,6 +147,9 @@ async function admin(username) {
         _.set(payload, 'realmName', 'employee')
         _.set(payload, 'referenceJobRoles', data.adminJobRoles())
 
+        _.set(json, 'users[0].referenceJobRoleNames', ['Employee Portal']);
+        _.set(json, 'productGroups[0].users[0].referenceJobRoleNames', ['Employee Portal']);
+
         await ingestUser(payload);
         console.log(username, "done");
         return null;
