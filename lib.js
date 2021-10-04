@@ -144,6 +144,7 @@ async function admin(username) {
     const password = 'ZCNkZW1v';
     try {
         const payload = require(`./data/${username}.json`)
+        _.set(payload, 'realmName', 'employee')
         _.set(payload, 'referenceJobRoles', data.adminJobRoles())
 
         await ingestUser(payload);
