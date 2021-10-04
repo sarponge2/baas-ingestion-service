@@ -150,6 +150,8 @@ async function admin(username) {
         _.set(json, 'users[0].referenceJobRoleNames', ['Employee Portal']);
         _.set(json, 'productGroups[0].users[0].referenceJobRoleNames', ['Employee Portal']);
 
+        console.log(JSON.stringify(payload))
+
         await ingestUser(payload);
         console.log(username, "done");
         return null;
