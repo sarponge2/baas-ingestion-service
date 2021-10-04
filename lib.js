@@ -10,6 +10,12 @@ const typeMaps = {
     SBA: 'savingAccounts'
 }
 
+const xPrdlBaaS = {
+    dev: 'sbg-dev-b5d46a71-e33f-420c-8e10-e644ff61c096',
+    stg: 'sbg-stg-b5d46a71-e33f-420c-8e10-e644ff61c0967',
+    prd: 'sbg-prd-b5d46a71-e33f-420c-8e10-e644ff61c0967'
+}
+
 function makeAPostCall(url, data, headers) {
     return fetch(url, {
         method: 'POST',
@@ -88,7 +94,7 @@ async function ingestUser(payload, env = "dev") {
     return await makeAPostCall(
         `https://sbg-legal-entity-http.${env}.sbg.live.backbaseservices.com/legal-entity`,
         payload,
-        {'X-PRDL-BAAS': 'sbg-stg-b5d46a71-e33f-420c-8e10-e644ff61c0967'}
+        {'X-PRDL-BAAS': xPrdlBaaS[env] }
     )
 }
 
