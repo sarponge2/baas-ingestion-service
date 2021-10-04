@@ -79,11 +79,11 @@ async function getAccounts(username) {
         });
 }
 
-async function deleteUser(username) {
+async function deleteUser(username, env = "dev") {
     try {
         await makeADeleteCall(
-            `https://sbg-legal-entity-http.stg.sbg.live.backbaseservices.com/legal-entity/${username}`,
-            {'X-PRDL-BAAS': 'sbg-stg-b5d46a71-e33f-420c-8e10-e644ff61c0967'}
+            `https://sbg-legal-entity-http.${env}.sbg.live.backbaseservices.com/legal-entity/${username}`,
+            {'X-PRDL-BAAS': xPrdlBaaS[env] }
         )
     } catch (e) {
 
