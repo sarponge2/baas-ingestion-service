@@ -32,9 +32,9 @@ args = commandLineArgs(optionList)
 if (!Object.keys(args).length || args.help || !args.user)
     return console.log(options)
 
-args.env = args.env || 'dev'
+args.cluster = args.cluster || 'dev'
 
-if (args.employee) admin(args.user, args.env)
-else run(args.user, args.env)
+if (args.employee) admin(args.user, args.cluster)
+else run(args.user, args.cluster)
 
 console.log(args)
